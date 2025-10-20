@@ -1,102 +1,170 @@
 # API 專案
 
-## 資料庫 Migration 紀錄
-
-### AppUser Migration - 2025/10/20
-
-#### Entity 定義
-位置：`Entities/AppUser.cs`
-
-```csharp
-public class AppUser
-{
-    public int MyProperty { get; set; }
-    public string Id { get; set; } = Guid.NewGuid().ToString();
-    public required string DisplayName { get; set; } = string.Empty;
-    public required string Email { get; set; } = string.Empty;
-}
-```
-
-#### Migration 執行步驟
-
-1. **創建 Migration**
-   ```bash
-   dotnet ef migrations add InitialCreateAppUser
-   ```
-   - 建立時間：2025-10-20 09:03:13
-   - Migration 檔案：`Migrations/20251020090313_InitialCreateAppUser.cs`
-
-2. **套用 Migration 到資料庫**
-   ```bash
-   dotnet ef database update
-   ```
-   - 執行結果：成功
-   - 資料庫：MySQL (使用 Pomelo.EntityFrameworkCore.MySql)
-
-#### 資料表結構
-
-**Users 資料表：**
-| 欄位名稱 | 資料類型 | 說明 |
-|---------|---------|------|
-| Id | varchar(255) | 主鍵，使用 GUID |
-| MyProperty | int | 整數屬性 |
-| DisplayName | longtext | 顯示名稱（必填）|
-| Email | longtext | Email 地址（必填）|
-
-#### 變更內容
-- 移除了之前的 `Products` 資料表
-- 新增 `Users` 資料表
-- 使用 UTF-8 MB4 字元集
+ASP.NET Core Web API 專案，使用 .NET 8.0 + Entity Framework Core + MySQL。
 
 ---
 
-## 如何使用 EF Core Migration
+## 快速開始
 
-### 基本命令
-
-**創建新的 Migration：**
+### 1. 安裝依賴
 ```bash
-dotnet ef migrations add <MigrationName>
+dotnet restore
 ```
 
-**更新資料庫：**
+### 2. 設定資料庫連線
+編輯 `appsettings.json`：
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "server=localhost;database=c_test;user=root;password=yourpassword"
+  }
+}
+```
+
+### 3. 執行 Migration
 ```bash
 dotnet ef database update
 ```
 
-**查看所有 Migrations：**
+### 4. 啟動專案
 ```bash
-dotnet ef migrations list
+dotnet run
 ```
 
-**移除最後一個 Migration（尚未套用到資料庫的情況）：**
-```bash
-dotnet ef migrations remove
-```
-
-**回滾到特定 Migration：**
-```bash
-dotnet ef database update <MigrationName>
-```
-
-**產生 SQL 腳本（不直接執行）：**
-```bash
-dotnet ef migrations script
-```
-
-### 工作流程
-
-1. 修改 Entity 類別（如 `AppUser`）
-2. 執行 `dotnet ef migrations add <描述性名稱>`
-3. 檢查生成的 Migration 檔案
-4. 執行 `dotnet ef database update` 套用變更
-5. 確認資料庫變更成功
+專案將會在 `https://localhost:5001` 啟動。
 
 ---
 
 ## 專案資訊
 
-- **.NET 版本：** .NET 8.0
-- **資料庫：** MySQL
-- **ORM：** Entity Framework Core 9.0.10
-- **MySQL Provider：** Pomelo.EntityFrameworkCore.MySql 9.0.0
+| 項目 | 說明 |
+|------|------|
+| **.NET 版本** | .NET 8.0 |
+| **框架** | ASP.NET Core Web API |
+| **ORM** | Entity Framework Core 9.0.10 |
+| **資料庫** | MySQL |
+| **資料庫提供者** | Pomelo.EntityFrameworkCore.MySql 9.0.0 |
+
+---
+
+## 專案結構
+
+```
+API/
+├── Controllers/          # API 控制器
+│   └── UsersController.cs
+├── Data/                # 資料庫 Context
+│   └── ApplicationDbContext.cs
+├── Entities/            # 資料模型
+│   └── AppUser.cs
+├── Migrations/          # EF Core Migrations
+├── docs/                # 技術文件（位於根目錄）
+├── appsettings.json     # 配置檔
+└── Program.cs           # 應用程式入口
+```
+
+---
+
+## 📚 技術文件
+
+詳細的技術文件存放在 **[../docs/](../docs/)** 資料夾：
+
+### 核心概念
+- **[ASP.NET 完整說明](../docs/aspnet-overview.md)**
+  - .NET Framework、.NET Core、ASP.NET 三者關係
+  - ASP.NET 演進歷史
+  - ASP.NET vs ASP.NET Core 詳細比較
+  - 核心概念：DI、配置、路由、中介軟體
+  - Program.cs 完整解析
+
+- **[.NET Framework vs .NET Core](../docs/dotnet-framework-vs-core.md)**
+  - 版本演進時間軸
+  - 主要差異對照表
+  - LTS vs STS 支援策略
+  - 遷移建議
+
+### Web 開發技術
+- **[ASP.NET Web 開發技術完整指南](../docs/web-development-technologies.md)**
+  - Web Forms、MVC、Web API、Razor Pages、Blazor
+  - 各技術適用場景與程式碼範例
+  - 技術選擇決策樹
+
+### 資料庫
+- **[Entity Framework Core Migration 指南](../docs/migrations-guide.md)**
+  - Migration 基本概念與命令
+  - 完整工作流程與專案紀錄
+  - 進階技巧與最佳實踐
+  - 常見問題解決方案
+
+---
+
+## 常用命令
+
+### Entity Framework Core
+
+```bash
+# 創建 Migration
+dotnet ef migrations add <MigrationName>
+
+# 套用 Migration
+dotnet ef database update
+
+# 查看 Migrations
+dotnet ef migrations list
+
+# 移除最後一個 Migration（未套用）
+dotnet ef migrations remove
+
+# 回滾到特定 Migration
+dotnet ef database update <MigrationName>
+```
+
+### 開發
+
+```bash
+# 啟動專案
+dotnet run
+
+# 監聽模式（自動重啟）
+dotnet watch run
+
+# 建置專案
+dotnet build
+
+# 發布專案
+dotnet publish -c Release
+```
+
+---
+
+## API 端點
+
+### Users API
+
+| 方法 | 路由 | 說明 |
+|------|------|------|
+| GET | `/api/users` | 取得所有使用者 |
+| GET | `/api/users/{id}` | 取得特定使用者 |
+| POST | `/api/users` | 建立新使用者 |
+| PUT | `/api/users/{id}` | 更新使用者 |
+| DELETE | `/api/users/{id}` | 刪除使用者 |
+
+---
+
+## 開發環境
+
+### 必要工具
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/download)
+- [MySQL](https://www.mysql.com/)
+- [Visual Studio Code](https://code.visualstudio.com/) 或 [Visual Studio 2022](https://visualstudio.microsoft.com/)
+
+### 推薦 VS Code 擴充
+- C# Dev Kit
+- REST Client
+- GitLens
+
+---
+
+## 授權
+
+此專案僅供學習使用。
