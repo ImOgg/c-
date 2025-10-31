@@ -12,8 +12,10 @@ dotnet new webapi -controllers -n API
 
 # 將專案加入解決方案
 dotnet sln add API
-```
 
+# 建立專案(一個c#的專案，非API)
+    dotnet new console -n MyApp
+```
 ### 開發工具與擴充套件
 - **C# Dev Kit** - VS Code 的 C# 開發套件
 - **C#** - 基本 C# 語言支援
