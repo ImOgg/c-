@@ -300,6 +300,20 @@ SELECT VERSION();
 
 ---
 
+###  簡化寫using
+
+```bash
+# Global.cs 
+using Global  w1.Models
+```
+
+```bash
+# API.csproj
+<ItemGroup>
+<Using Include="w1.Models">
+</ItemGroup>
+```
+
 ## 參考資源
 
 - [ASP.NET Core 官方文件](https://learn.microsoft.com/zh-tw/aspnet/core/)
